@@ -3,6 +3,8 @@
 #include "MetaUtils.h"
 
 #include <iostream>
+#include <fstream>
+#include <exception>
 
 #include <boost/algorithm/string/join.hpp>
 
@@ -58,7 +60,7 @@ namespace utils
                   << "\" for reading." << std::endl;
             error << strerror( errno );
 
-            throw std::exception( error.str( ).c_str( ) );
+            throw std::runtime_error( error.str( ) );
         }
 
         input.seekg( 0, std::ios::end );
@@ -91,7 +93,7 @@ namespace utils
                   << std::endl;
             error << strerror( errno );
 
-            throw std::exception( error.str( ).c_str( ) );
+            throw std::runtime_error( error.str( ) );
         }
 
         output << text;

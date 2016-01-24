@@ -1,0 +1,64 @@
+
+cmake_minimum_required(VERSION 2.8)
+
+set(CPP_REFLECTION_DIR ${CMAKE_SOURCE_DIR}/../../)
+set(CPP_REFLECTION_SOURCE_DIR ${CPP_REFLECTION_DIR}/Source/)
+set(PARSER_DIR ${CPP_REFLECTION_SOURCE_DIR}/Parser)
+
+file(GLOB MACRO_UTILS_SRC
+    "${CPP_REFLECTION_SOURCE_DIR}/MacroUtils.h"
+    )
+
+file(GLOB PARSER_BASE_SRC
+    "${PARSER_DIR}/*.h"
+    "${PARSER_DIR}/*.cpp"
+    )
+
+file(GLOB PARSER_LANGUAGE_SRC
+    "${PARSER_DIR}/LanguageTypes/*.h"
+    "${PARSER_DIR}/LanguageTypes/*.cpp"
+    )
+
+set(BASE_INCLUDE_DIRECTORIES
+	${CPP_REFLECTION_SOURCE_DIR}
+	${PARSER_DIR}
+	${PARSER_DIR}/LanguageTypes/
+	)
+
+set(BASE_LINK_LIBRARIES
+	)
+
+list(INSERT CMAKE_MODULE_PATH 0 "${CPP_REFLECTION_DIR}/CMake/Modules/")
+
+find_package(LibClang REQUIRED)
+
+message("Flags: ${LIBCLANG_CXXFLAGS}")
+
+list(APPEND BASE_LINK_LIBRARIES ${LIBCLANG_LIBRARIES})
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14 ${LIBCLANG_CXXFLAGS}")
+
+set(Boost_USE_STATIC_LIBS ON) 
+set(Boost_USE_MULTITHREADED ON)  
+set(Boost_USE_STATIC_RUNTIME ON) 
+find_package(Boost 1.59.0 REQUIRED COMPONENTS filesystem program_options system regex) 
+
+list(APPEND BASE_INCLUDE_DIRECTORIES ${Boost_INCLUDE_DIRS}) 
+list(APPEND BASE_LINK_LIBRARIES ${Boost_LIBRARIES})
+
+include_directories(
+  	${BASE_INCLUDE_DIRECTORIES}
+	)
+
+SOURCE_GROUP("Sources" FILES ${PARSER_BASE_SRC})
+SOURCE_GROUP("Sources\\LanguageTypes" FILES ${PARSER_LANGUAGE_SRC})
+
+add_executable(Parser
+	${MACRO_UTILS_SRC}
+	${PARSER_BASE_SRC} 
+	${PARSER_LANGUAGE_SRC}
+	)
+
+target_link_libraries(Parser
+	${BASE_LINK_LIBRARIES}
+  	)

@@ -72,7 +72,7 @@ void ReflectionParser::Parse(void)
         0,
         nullptr
     );
-
+    
     auto cursor = clang_getTranslationUnitCursor( m_translationUnit );
 
     Namespace tempNamespace;
@@ -190,7 +190,7 @@ void ReflectionParser::GenerateHeader(std::string &output) const
         error << "Unable to compile header template." << std::endl;
         error << headerTemplate.errorMessage( );
 
-        throw std::exception( error.str( ).c_str( ) );
+        throw std::runtime_error( error.str( ) );
     }
 
     output = headerTemplate.render( headerData );
@@ -228,7 +228,7 @@ void ReflectionParser::GenerateSource(std::string &output) const
         error << "Unable to compile header template." << std::endl;
         error << sourceTemplate.errorMessage( );
 
-        throw std::exception( error.str( ).c_str( ) );
+        throw std::runtime_error( error.str( ) );
     }
 
     output = sourceTemplate.render( sourceData );
@@ -390,7 +390,9 @@ TemplateData ReflectionParser::compileEnumTemplates(void) const
     for (auto *enewm : m_enums)
     {
         if (enewm->ShouldCompile( ))
+        {
             data << enewm->CompileTemplate( this );
+        }
     }
 
     return data;
