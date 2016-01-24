@@ -29,7 +29,9 @@ namespace ursine
                 typename std::enable_if< 
                     !std::is_trivially_default_constructible<U>::value 
                 >::type* = nullptr
-            );
+            )
+            {
+            }
 
             template<typename U = T>
             static void addDefaultConstructor(
@@ -37,21 +39,27 @@ namespace ursine
                 typename std::enable_if< 
                     std::is_trivially_default_constructible<U>::value 
                 >::type* = nullptr
-            );
+            )
+            {
+            }
 
             template<typename U = T>
             static void applyTrivialAttributes(TypeData &data, 
                 typename std::enable_if< 
                     !std::is_trivial<U>::value 
                 >::type* = nullptr
-            );
+            )
+            {
+            }
 
             template<typename U = T>
             static void applyTrivialAttributes(TypeData &data, 
                 typename std::enable_if< 
                     std::is_trivial<U>::value 
                 >::type* = nullptr
-            );
+            )
+            {
+            }
         };
     }
 }
