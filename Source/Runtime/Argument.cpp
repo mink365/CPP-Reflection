@@ -17,8 +17,12 @@ namespace ursine
         Argument::Argument(const Argument &rhs) 
             : m_type( rhs.m_type )
             , m_data( rhs.m_data ) { }
+        
+        Argument::Argument(Argument &rhs)
+        : m_type( rhs.m_type )
+        , m_data( rhs.m_data ) { }
 
-        Argument::Argument(Variant &obj) 
+        Argument::Argument(Variant &obj)
             : m_type( obj.GetType( ) )
             , m_data( obj.getPtr( ) ) { }
 

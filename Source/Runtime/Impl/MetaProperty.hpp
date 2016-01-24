@@ -1,3 +1,5 @@
+#include <functional>
+
 namespace ursine
 {
     namespace meta

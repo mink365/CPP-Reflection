@@ -20,6 +20,7 @@ namespace ursine
         public:
             Argument(void);
             Argument(const Argument &rhs);
+            Argument(Argument &rhs);
             Argument(Variant &obj);
             Argument(const Variant &obj);
 

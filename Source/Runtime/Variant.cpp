@@ -52,7 +52,7 @@ namespace ursine
 
         Type Variant::GetType(void) const
         {
-            return m_base ? m_base->GetType( ) : Type::Invalid;
+            return m_base ? m_base->GetType( ) : Type(Type::Invalid);
         }
 
         int Variant::ToInt(void) const

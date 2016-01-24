@@ -1,7 +1,14 @@
 #include "Type.h"
 #include "TypeUnpacker.hpp"
 
-#include <boost/functional/hash.hpp>
+//#include <boost/functional/hash.hpp>
+
+template <class T>
+inline void hash_combine(std::size_t& seed, const T& v)
+{
+    std::hash<T> hasher;
+    seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
+}
 
 namespace std
 {
@@ -16,7 +23,7 @@ namespace std
 
             // combine the hash of all type IDs in the signature
             for (auto &type : signature)
-                boost::hash_combine( seed, type.GetID( ) );
+                hash_combine( seed, type.GetID( ) );
 
             return seed;
         }
