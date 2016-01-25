@@ -1,5 +1,8 @@
 #pragma once
 
+#include "../../Source/Runtime/Macros.h"
+#include "../../Source/Runtime/MetaProperty.h"
+
 using namespace ursine::meta;
 
 enum class SliderType
@@ -10,9 +13,12 @@ enum class SliderType
 
 struct Slider : public MetaProperty
 {
+    META_OBJECT
+
+public:
     SliderType type;
 
-    Slider(SliderType type) 
+    Slider(SliderType type)
         : type( type ) { }
 };
 
@@ -28,15 +34,11 @@ public:
         , max( max ) { }
 };
 
-//Meta(Range(0.0f, 1.0f), Slider(SliderType::Horizontal))
-//float someIntensityField;
+// Meta(Range(0.0f, 1.0f), Slider(SliderType::Horizontal))
+// float someIntensityField;
 
-struct SoundEffect 
+struct SoundEffect : public Object
 {
-    
-//    SoundEffect(){};
-    
-    
     Meta(Range(0.0f, 100.0f))
     float volume;
 
