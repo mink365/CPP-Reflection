@@ -1,12 +1,17 @@
 #include <Type.h>
 #include <TypeInfo.h>
-//#include <TypeData.h>
+#include <TypeData.h>
 
 //#include "MacroUtils.h"
 
-#define UAssert 
+#define __MESSAGE(text) __pragma( message(__FILE__ "(" STRINGIFY(__LINE__) ")" text) )
 
-#define __MESSAGE 
+#define UAssert(cond, text) do { \
+    if(!(cond)) { \
+        printf("Assert failed: %s \n", text); \
+    } \
+} while(0);
+
 
 // Outputs a warning during compile time
 #define URSINE_WARNING(text) __MESSAGE( " : Warning: " ##text )
