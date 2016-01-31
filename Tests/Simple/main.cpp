@@ -55,7 +55,7 @@ void TestEnum()
     
     for (auto key : list) {
 
-        printf("Key: %s \n", key.c_str());
+        printf("Enum %s Key: %s \n", _enum.GetName().c_str(), key.c_str());
     }
     
     auto values = _enum.GetValues();
@@ -65,7 +65,7 @@ void TestEnum()
     
         SliderType2 v = value.GetValue<SliderType2>();
         
-        printf("Value: %d \n", v);
+        printf("Enum %s Value: %d \n", _enum.GetName().c_str(), v);
     }
 }
 
