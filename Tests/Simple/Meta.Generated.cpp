@@ -11,7 +11,7 @@
 
 namespace m = ursine::meta;
 
-m::ReflectionDatabase::Initializer minkInitializer([] {
+m::ReflectionDatabase::Initializer SimpleInitializer([] {
     auto &db = m::ReflectionDatabase::Instance( );
 
     ///////////////////////////////////////////////////////////////////////////
@@ -93,6 +93,31 @@ m::ReflectionDatabase::Initializer minkInitializer([] {
         
     }
     
+    {
+        { // Base Type
+            auto id = db.AllocateType( "Hello2" );
+            auto &type = db.types[ id ];
+
+            m::TypeInfo<Hello2>::Register( id, type, true );
+        }
+        
+        { // Pointer Type
+            auto id = db.AllocateType( "Hello2*" );
+            auto &type = db.types[ id ];
+
+            m::TypeInfo<Hello2*>::Register( id, type, false );
+        }
+        
+        
+        { // Const Pointer Type
+            auto id = db.AllocateType( "const Hello2*" );
+            auto &type = db.types[ id ];
+
+            m::TypeInfo<const Hello2*>::Register( id, type, false );
+        }
+        
+    }
+    
     ///////////////////////////////////////////////////////////////////////////
     // Enum Allocations
     ///////////////////////////////////////////////////////////////////////////
@@ -143,31 +168,6 @@ m::ReflectionDatabase::Initializer minkInitializer([] {
             auto &type = db.types[ id ];
 
             m::TypeInfo<const SliderType2*>::Register( id, type, false );
-        }
-        
-    }
-    
-    {
-        { // Base Type
-            auto id = db.AllocateType( "SliderType3" );
-            auto &type = db.types[ id ];
-
-            m::TypeInfo<SliderType3>::Register( id, type, true );
-        }
-        
-        { // Pointer Type
-            auto id = db.AllocateType( "SliderType3*" );
-            auto &type = db.types[ id ];
-
-            m::TypeInfo<SliderType3*>::Register( id, type, false );
-        }
-        
-        
-        { // Const Pointer Type
-            auto id = db.AllocateType( "const SliderType3*" );
-            auto &type = db.types[ id ];
-
-            m::TypeInfo<const SliderType3*>::Register( id, type, false );
         }
         
     }
@@ -226,27 +226,6 @@ m::ReflectionDatabase::Initializer minkInitializer([] {
         }
     }
     
-    {
-        auto typeID = m::TypeInfo<SliderType3>::ID;
-
-        if (typeID != m::Type::Invalid && !m::TypeInfo<SliderType3>::Defined)
-        {
-            auto &type = db.types[ typeID ];
-
-            type.meta = {
-                
-            };
-
-            type.SetEnum<SliderType3>( "SliderType3", {
-                 { "Horizontal", SliderType3::Horizontal }, 
-                 { "Vertical", SliderType3::Vertical } 
-                
-            } );
-
-            m::TypeInfo<SliderType3>::Defined = true;
-        }
-    }
-    
     ///////////////////////////////////////////////////////////////////////////
     // Class Definitions
     ///////////////////////////////////////////////////////////////////////////
@@ -269,35 +248,35 @@ m::ReflectionDatabase::Initializer minkInitializer([] {
                  
             } );
 
-//            // Constructors
-//            
-//            type.AddConstructor<Slider, SliderType>(
-//                [](m::ArgumentList &args)
-//                {
-//                    return m::Variant { 
-//                        Slider( args[ 0 ].GetValue<SliderType>( ) )
-//                    };
-//                }, 
-//                {
-//                    
-//                },
-//                false
-//            );
-//            
-//            // Dynamic Constructors
-//            
-//            type.AddConstructor<Slider, SliderType>(
-//                [](m::ArgumentList &args)
-//                {
-//                    return m::Variant { 
-//                        new Slider( args[ 0 ].GetValue<SliderType>( ) )
-//                    };
-//                }, 
-//                {
-//                    
-//                },
-//                true
-//            );
+            // Constructors
+            
+            type.AddConstructor<Slider, SliderType>(
+                [](m::ArgumentList &args)
+                {
+                    return m::Variant { 
+                        Slider( args[ 0 ].GetValue<SliderType>( ) )
+                    };
+                }, 
+                {
+                    
+                },
+                false
+            );
+            
+            // Dynamic Constructors
+            
+            type.AddConstructor<Slider, SliderType>(
+                [](m::ArgumentList &args)
+                {
+                    return m::Variant { 
+                        new Slider( args[ 0 ].GetValue<SliderType>( ) )
+                    };
+                }, 
+                {
+                    
+                },
+                true
+            );
             
             // Fields
             
@@ -347,35 +326,35 @@ m::ReflectionDatabase::Initializer minkInitializer([] {
                  
             } );
 
-//            // Constructors
-//            
-//            type.AddConstructor<Range, float, float>(
-//                [](m::ArgumentList &args)
-//                {
-//                    return m::Variant { 
-//                        Range( args[ 0 ].GetValue<float>( ), args[ 1 ].GetValue<float>( ) )
-//                    };
-//                }, 
-//                {
-//                    
-//                },
-//                false
-//            );
-//            
-//            // Dynamic Constructors
-//            
-//            type.AddConstructor<Range, float, float>(
-//                [](m::ArgumentList &args)
-//                {
-//                    return m::Variant { 
-//                        new Range( args[ 0 ].GetValue<float>( ), args[ 1 ].GetValue<float>( ) )
-//                    };
-//                }, 
-//                {
-//                    
-//                },
-//                true
-//            );
+            // Constructors
+            
+            type.AddConstructor<Range, float, float>(
+                [](m::ArgumentList &args)
+                {
+                    return m::Variant { 
+                        Range( args[ 0 ].GetValue<float>( ), args[ 1 ].GetValue<float>( ) )
+                    };
+                }, 
+                {
+                    
+                },
+                false
+            );
+            
+            // Dynamic Constructors
+            
+            type.AddConstructor<Range, float, float>(
+                [](m::ArgumentList &args)
+                {
+                    return m::Variant { 
+                        new Range( args[ 0 ].GetValue<float>( ), args[ 1 ].GetValue<float>( ) )
+                    };
+                }, 
+                {
+                    
+                },
+                true
+            );
             
             // Fields
             
@@ -489,7 +468,28 @@ m::ReflectionDatabase::Initializer minkInitializer([] {
                     instance.volume = value.GetValue<float>( );
                 },
                 {
-                    
+                    std::make_pair( typeof( Range ), m::MetaPropertyInitializer<Range>( 0.0f, 100.0f ) )
+
+                }
+            );
+            
+            type.AddField<SoundEffect, float>( "field2",
+                [](const m::Variant &obj)
+                {
+                    auto &instance = obj.GetValue<SoundEffect>( );
+
+                    return m::Variant { instance.field2 };
+                },
+                [](m::Variant &obj, const m::Variant &value)
+                {
+                    auto &instance = obj.GetValue<SoundEffect>( );
+
+                    instance.field2 = value.GetValue<float>( );
+                },
+                {
+                    std::make_pair( typeof( Slider ), m::MetaPropertyInitializer<Slider>( SliderType::Horizontal ) ), 
+std::make_pair( typeof( Range ), m::MetaPropertyInitializer<Range>( 0.0f, 1.0f ) )
+
                 }
             );
             
@@ -512,10 +512,92 @@ m::ReflectionDatabase::Initializer minkInitializer([] {
                 }
             );
             
+            type.AddMethod( "Load2",
+                static_cast<void(SoundEffect::*)(const std::string &)>( &SoundEffect::Load2 ),
+                [](m::Variant &obj, m::ArgumentList &args)
+                { 
+                    auto &instance = obj.GetValue<SoundEffect>( );
+                    
+                    instance.Load2( args[ 0 ].GetValue<const std::string &>( ) );
+
+                    return m::Variant { };
+                },
+                {
+                    
+                }
+            );
+            
+            type.AddMethod( "SetVolume",
+                static_cast<void(SoundEffect::*)(float)>( &SoundEffect::SetVolume ),
+                [](m::Variant &obj, m::ArgumentList &args)
+                { 
+                    auto &instance = obj.GetValue<SoundEffect>( );
+                    
+                    instance.SetVolume( args[ 0 ].GetValue<float>( ) );
+
+                    return m::Variant { };
+                },
+                {
+                    
+                }
+            );
+            
             // Static Methods
             
 
             m::TypeInfo<SoundEffect>::Defined = true;
+        }
+    }
+    /**
+     * Hello2
+     */
+    {
+        auto typeID = m::TypeInfo<Hello2>::ID;
+
+        if (typeID != m::Type::Invalid && !m::TypeInfo<Hello2>::Defined)
+        {
+            auto &type = db.types[ typeID ];
+
+            type.meta = {
+                
+            };
+
+            type.LoadBaseClasses( db, typeID, { 
+                 
+            } );
+
+            // Constructors
+            
+            // Dynamic Constructors
+            
+            // Fields
+            
+            type.AddField<Hello2, int>( "v",
+                [](const m::Variant &obj)
+                {
+                    auto &instance = obj.GetValue<Hello2>( );
+
+                    return m::Variant { instance.v };
+                },
+                [](m::Variant &obj, const m::Variant &value)
+                {
+                    auto &instance = obj.GetValue<Hello2>( );
+
+                    instance.v = value.GetValue<int>( );
+                },
+                {
+                    
+                }
+            );
+            
+            // Static Fields
+            
+            // Methods
+            
+            // Static Methods
+            
+
+            m::TypeInfo<Hello2>::Defined = true;
         }
     }
 });

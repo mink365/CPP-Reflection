@@ -2,15 +2,25 @@
 
 #include "SoundEffect.h"
 
-enum class SliderType2
+// attribute must be add as this
+// Meta(Enable())
+// enum class SliderType2 {
+// will NOT work
+enum class Meta(Enable()) SliderType2
 {
     Horizontal,
     Vertical
 };
 
-enum class SliderType3
+class [[deprecated]] Hello
 {
-    Horizontal,
-    Vertical
+public:
+    int v;
+};
+
+class Meta(Enable()) Hello2
+{
+public:
+    int v;
 };
 

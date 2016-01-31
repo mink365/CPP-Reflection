@@ -1,11 +1,3 @@
-//
-//  main.cpp
-//  ClangTest1
-//
-//  Created by rui kou on 15/9/26.
-//  Copyright © 2015年 rui kou. All rights reserved.
-//
-
 #include <iostream>
 
 #include "Meta.Generated.h"
@@ -26,6 +18,8 @@ void TestClass()
     
     // the runtime supports overloading, but by default returns the first overload
     Method loadMethod = soundEffectType.GetMethod( "Load" );
+    Method load2Method = soundEffectType.GetMethod( "Load2" );
+    Method setVolume = soundEffectType.GetMethod( "SetVolume" );
     
     // creates an instance of a sound effect
     Variant effect = soundEffectType.Create( );
@@ -36,10 +30,19 @@ void TestClass()
     // 85
     volumeField.GetValue( effect );
     
-    // effect.Load is called
-//    loadMethod.Invoke( effect, { "Explosion.wav" } );
-    loadMethod.Invoke(effect, "");
+    // effect.SetVolume is called
+    setVolume.Invoke(effect, 20.5f);
     
+    std::string name = "Explosion.wav";
+    load2Method.Invoke(effect, name);
+    
+    // effect.Load is called
+    const char* name2 = "Explosion.wav";
+    loadMethod.Invoke(effect, name2);
+    
+    // type of arguments must be explicitly
+    // loadMethod.Invoke(effect, "Explosion.wav");
+    // not work
 }
 
 void TestEnum()
@@ -66,21 +69,6 @@ void TestEnum()
     }
 }
 
-class Range2
-{
-    public:
-    Range2(float min, float max)
-    {
-        
-    }
-};
-
-class Hello
-{
-    __attribute__((annotate("Range2(1, 2)")))
-    int ppp;
-};
-
 void TestAttribute()
 {
     // you can also use type meta::Type::Get( "SoundEffect" ) based on a string name
@@ -100,6 +88,8 @@ void TestAttribute()
     
     // 100.0f
     float max = volumeRange.max;
+    
+    std::cout << "Range min: " << min << " max: " << max << std::endl;
 }
 
 int main(int argc, const char * argv[]) {
